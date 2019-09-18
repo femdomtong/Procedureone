@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sz.lwt.dao.Test">
+	
+
+	<!-- 普通存储过程 -->
+	<select id="callProcedure" parameterType="testProcedure" 
+		useCache="false" statementType="CALLABLE" >
+	
+	   {call TEST_JAVA(
+	    #{in_str,mode=IN,jdbcType=VARCHAR},
+	    #{out_str,mode=OUT,jdbcType=VARCHAR}
+	    )}
+
+	</select>
+	
+	<!-- 日期类存储日期 -->
+	<select id="callProcedureDate" parameterType="testProcedureDate" 
+		useCache="false" statementType="CALLABLE">
+		{call TEST_JAVA_DATE(
+    #{in_str,mode=IN,jdbcType=DATE},
+    #{out_str,mode=OUT,jdbcType=DATE}
+    )}
+	</select>
+	
+	
+</mapper>

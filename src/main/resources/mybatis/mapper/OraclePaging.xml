@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sz.lwt.dao.OraclePaging">
+	<!-- 自定义结果集 -->
+	<resultMap id="book_resultMap" type="book">
+		<id column="bookid" property="bookId"/>
+		<result column="book_name" property="book_name"/>
+		<result column="public_dept" property="public_dept"/>
+		<result column="public_date" property="public_date"/>
+		<result column="book_auth" property="book_auth"/>
+		<result column="img_path" property="img_path"/>
+		<result column="summary" property="summary"/>
+	</resultMap>
+	<!-- 方式一 -->
+	<!-- <select id="paging" parameterType="map" statementType="CALLABLE" useCache="false" >
+		 {call PAGING(
+	    #{p_pagesql,mode=IN,jdbcType=VARCHAR},
+	    #{p_curPage,mode=INOUT,jdbcType=INTEGER},
+	    #{p_pageSize,mode=INOUT,jdbcType=INTEGER},
+	    #{p_totalRecords,mode=OUT,jdbcType=INTEGER},
+	    #{p_totalPages,mode=OUT,jdbcType=INTEGER},
+	     #{pageResultSet,mode=OUT,jdbcType=CURSOR,javaType=java.sql.ResultSet, resultMap=book_resultMap}
+	    )}
+	</select>
+	 -->
+	<!-- 方式二 -->
+	<!-- 注意：调用存储过程的两个大括号和中间的内容不要换行！可能会出问题的。正确姿势：{CALL xxx(?,?...)} -->
+	<!-- 自定义输入参数集 -->
+	<parameterMap type="map" id="book_parameterMap">
+		<parameter property="p_pagesql" mode="IN" jdbcType="VARCHAR" />
+		<parameter property="p_curPage" mode="INOUT" jdbcType="INTEGER" />
+		<parameter property="p_pageSize" mode="INOUT" jdbcType="INTEGER" />
+		<parameter property="p_totalRecords" mode="OUT" jdbcType="INTEGER" />
+		<parameter property="p_totalPages" mode="OUT" jdbcType="INTEGER" />
+		<parameter property="pageResultSet" mode="OUT" jdbcType="CURSOR" javaType="java.sql.ResultSet" resultMap="book_resultMap" />
+	</parameterMap>
+	<select id="paging" statementType="CALLABLE" parameterMap="book_parameterMap">
+		{CALL PAGING(?,?,?,?,?,?)}
+	</select>
+
+	
+</mapper>
